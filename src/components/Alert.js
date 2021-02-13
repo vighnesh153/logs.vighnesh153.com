@@ -8,14 +8,14 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 const useStyles = makeStyles((theme) => ({
   alertContainer: {
     width: '95%',
-    margin: 'auto',
+    margin: theme.spacing(2.5, 'auto', -1),
   },
 }));
 
-function MyAlert({isOpen, setIsOpen, alertObj}) {
+function MyAlert({close, alertObj: {content, open, title, type}}) {
   const classes = useStyles();
 
-  if (isOpen === false) {
+  if (open === false) {
     return null;
   }
 
@@ -23,11 +23,11 @@ function MyAlert({isOpen, setIsOpen, alertObj}) {
     <Grid item className={classes.alertContainer}>
       <Alert
         variant="filled"
-        severity={alertObj.type}
-        onClose={() => setIsOpen(false)}
+        severity={type}
+        onClose={close}
       >
-        <AlertTitle><strong>{alertObj.title}</strong></AlertTitle>
-        <strong>{alertObj.content}</strong>
+        <AlertTitle><strong>{title}</strong></AlertTitle>
+        <strong>{content}</strong>
       </Alert>
     </Grid>
   );

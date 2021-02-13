@@ -1,5 +1,6 @@
 import React from 'react';
 import {withStyles, useTheme} from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -37,13 +38,19 @@ const headers = {
   meta: 'Meta',
 };
 
+const LOG_LEVELS = {
+  ERROR: "error",
+  WARN: "warn",
+  INFO: "info",
+}
+
 const getBgColor = (logLevel, theme) => {
   switch (logLevel) {
-    case 'error':
+    case LOG_LEVELS.ERROR:
       return {backgroundColor: theme.palette.error.main};
-    case 'warn':
+    case LOG_LEVELS.WARN:
       return {backgroundColor: theme.palette.warning.main};
-    case 'info':
+    case LOG_LEVELS.INFO:
       return {backgroundColor: theme.palette.info.main};
     default:
       return {}
@@ -52,11 +59,11 @@ const getBgColor = (logLevel, theme) => {
 
 const getTextColor = (logLevel, theme) => {
   switch (logLevel) {
-    case 'error':
+    case LOG_LEVELS.ERROR:
       return {color: theme.palette.error.contrastText};
-    case 'warn':
+    case LOG_LEVELS.WARN:
       return {color: theme.palette.warning.contrastText};
-    case 'info':
+    case LOG_LEVELS.INFO:
       return {color: theme.palette.info.contrastText};
     default:
       return {}
@@ -66,20 +73,26 @@ const getTextColor = (logLevel, theme) => {
 export default function Logs({logs}) {
   const theme = useTheme();
 
-  const tableCells = (items, log) => (
-    items.map((item, index) => (
-      <StyledTableCell
-        align={'left'}
-        key={index}
-        style={getTextColor(log.level, theme)}
-      >
-        {item}
-      </StyledTableCell>
-    ))
-  );
+  const tableCells = (items, log) => {
+    const style = {
+      ...getTextColor(log.level, theme),
+      ...getBgColor(log.level, theme),
+    }
+    return (
+      items.map((item, index) => (
+        <StyledTableCell
+          align={'left'}
+          key={index}
+          style={Object.values(LOG_LEVELS).includes(item) ? style : {}}
+        >
+          {item}
+        </StyledTableCell>
+      ))
+    );
+  };
 
   const tableRow = (log) => (
-    <StyledTableRow key={log.id} style={getBgColor(log.level, theme)}>
+    <StyledTableRow key={log.id}>
       {tableCells(
         [log.timestamp, log.requestId, log.level, log.message, log.meta],
         log
@@ -101,6 +114,15 @@ export default function Logs({logs}) {
         </TableHead>
         <TableBody>
           {logs.map(tableRow)}
+          {logs.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={5}>
+                <Grid container alignItems={"center"} justify={"center"}>
+                  No logs found.
+                </Grid>
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

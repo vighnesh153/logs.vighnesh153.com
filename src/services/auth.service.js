@@ -1,10 +1,7 @@
 import Cookie from 'js-cookie';
+import qs from "qs";
 
-export const isDev = window.location.href.startsWith('http://localhost');
-
-export const apiUrl = isDev ? 'http://localhost:3001' : 'https://api.vighnesh153.com';
-export const clientUrl = isDev ? 'http://localhost:3000' : 'https://logs.vighnesh153.com';
-export const authUrl = isDev ? 'http://localhost:3010' : 'https://auth.vighnesh153.com';
+import { AUTH_URL, CLIENT_URL } from '../constants';
 
 export const isLoggedIn = () => {
   const user = Cookie.get('user');
@@ -17,13 +14,15 @@ export const isAdmin = () => {
   return userRoles.includes('admin');
 };
 
-const getPostAuthRedirectUrl = () => {
-  return encodeURIComponent(clientUrl + '?loginSuccess');
+const getPostAuthRedirectUrl = (params) => {
+  const queryParams = qs.stringify({...params, loginSuccess: true})
+  console.log(queryParams);
+  return encodeURIComponent(CLIENT_URL + '?' + queryParams);
 };
 
-export const getAuthUrl = () => {
-  const redirectTo = getPostAuthRedirectUrl();
-  return `${authUrl}?redirectTo=${redirectTo}`;
+export const getAuthUrl = (params) => {
+  const redirectTo = getPostAuthRedirectUrl(params);
+  return `${AUTH_URL}?redirectTo=${redirectTo}`;
 };
 
 export const loginSuccess = () => {
