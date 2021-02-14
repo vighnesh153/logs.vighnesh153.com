@@ -1,6 +1,7 @@
 import React from 'react';
 import {withStyles, useTheme} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -69,7 +70,7 @@ const getTextColor = (logLevel, theme) => {
   }
 };
 
-export default function Logs({logs, loading, selected}) {
+export default function Logs({logs, loading, selected, setSelected}) {
   const theme = useTheme();
 
   const tableCells = (log) => {
@@ -84,7 +85,17 @@ export default function Logs({logs, loading, selected}) {
           key={index}
           style={Object.values(LOG_LEVELS).includes(item) ? style : {}}
         >
-          {item}
+          {
+            item === log.requestId ? (
+              <Button
+                variant={"contained"}
+                color={"primary"}
+                onClick={() => setSelected((o) => ({...o, requestId: item}))}
+              >
+                {item}
+              </Button>
+            ) : item
+          }
         </StyledTableCell>
       ))
     );

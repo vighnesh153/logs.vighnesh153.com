@@ -157,7 +157,7 @@ function App() {
 
   const LogsContainer = (
     <Grid style={{width: '95%', margin: theme.spacing(2.5, 'auto'), overflowX: 'auto'}}>
-      <Logs logs={logs} loading={loading} selected={selected}/>
+      <Logs logs={logs} loading={loading} selected={selected} setSelected={setSelected}/>
     </Grid>
   );
 
