@@ -9,7 +9,7 @@ export const isLoggedIn = () => {
 };
 
 export const isAdmin = () => {
-  const user = JSON.parse(Cookie.get('user') || {});
+  const user = JSON.parse(Cookie.get('user') || '{}');
   const userRoles = user.roles || [];
   return userRoles.includes('admin');
 };

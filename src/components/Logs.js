@@ -32,7 +32,6 @@ const StyledTableRow = withStyles((theme) => ({
 const headers = {
   id: 'header',
   requestId: 'Request ID',
-  timestamp: 'Time',
   level: 'Level',
   message: 'Message',
   meta: 'Meta',
@@ -73,13 +72,13 @@ const getTextColor = (logLevel, theme) => {
 export default function Logs({logs}) {
   const theme = useTheme();
 
-  const tableCells = (items, log) => {
+  const tableCells = (log) => {
     const style = {
       ...getTextColor(log.level, theme),
       ...getBgColor(log.level, theme),
     }
     return (
-      items.map((item, index) => (
+      [log.requestId, log.level, log.message, log.meta].map((item, index) => (
         <StyledTableCell
           align={'left'}
           key={index}
@@ -93,10 +92,7 @@ export default function Logs({logs}) {
 
   const tableRow = (log) => (
     <StyledTableRow key={log.id}>
-      {tableCells(
-        [log.timestamp, log.requestId, log.level, log.message, log.meta],
-        log
-      )}
+      {tableCells(log)}
     </StyledTableRow>
   );
 
@@ -105,7 +101,6 @@ export default function Logs({logs}) {
       <Table style={{minWidth: 700}}>
         <TableHead>
           <TableRow>
-            <StyledTableCell align={'left'}>{headers.timestamp}</StyledTableCell>
             <StyledTableCell align={'left'}>{headers.requestId}</StyledTableCell>
             <StyledTableCell align={'left'}>{headers.level}</StyledTableCell>
             <StyledTableCell align={'left'}>{headers.message}</StyledTableCell>
