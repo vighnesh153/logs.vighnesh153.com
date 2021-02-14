@@ -2,6 +2,8 @@ import {useState, useEffect} from "react";
 import {useLocation, useHistory} from "react-router-dom";
 
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import useTheme from "@material-ui/core/styles/useTheme";
 
 import Logs from "./Logs";
@@ -47,9 +49,9 @@ function App() {
 
     const query = util.parseQuery(location.search);
     if (query.service === 'demo') {
+      setLoading(false);
       setLogs(dummyLogs);
     } else {
-      setLogs([]);
       setLoading(true);
       data.fetchLogs({setLogs, handleError, config, setLoading}, selected, page);
     }
@@ -57,7 +59,7 @@ function App() {
     return () => {
       config.doProcess = false;
     };
-  }, [history, selected]);
+  }, [page, history, selected]);
 
   // selected change
   useEffect(() => {
@@ -68,12 +70,12 @@ function App() {
     if (Object.keys(query).length > 0) {
       history.replace("/?" + util.searchifyQuery(query));
     }
+    setPage(1);
   }, [selected]);
 
   // On location change
   useEffect(() => {
     const query = util.parseQuery(location.search);
-    console.log(JSON.stringify(query));
     if (query.loginSuccess) {
       delete query.loginSuccess;
       query.time = Date.now();
@@ -131,6 +133,10 @@ function App() {
     });
   };
 
+  const loadNextPage = () => {
+    setPage(p => p + 1);
+  };
+
   const AlertComponent = (
     <Alert
       alertObj={alert}
@@ -151,22 +157,35 @@ function App() {
 
   const LogsContainer = (
     <Grid style={{width: '95%', margin: theme.spacing(2.5, 'auto'), overflowX: 'auto'}}>
-      <Logs logs={logs} loading={loading}/>
+      <Logs logs={logs} loading={loading} selected={selected}/>
+    </Grid>
+  );
+
+  const FetchMoreButtonContainer = (
+    <Grid container justify={"center"} style={{margin: theme.spacing(1, 0, 1)}}>
+      <Grid item style={{width: 'fit-content'}}>
+        <Button
+          variant={"contained"}
+          color={"secondary"}
+          disabled={selected.service === 'demo' || loading}
+          onClick={loadNextPage}
+          endIcon={loading ? <CircularProgress size={20} /> : null}
+        >Fetch More</Button>
+      </Grid>
     </Grid>
   );
 
   return (
-    <div
-      style={{
+    <div style={{
         height: '100%',
         backgroundColor: theme.palette.background.default,
         overflow: 'auto',
-      }}
-    >
+      }}>
       <NavBar/>
       {AlertComponent}
       {HeaderContainer}
       {LogsContainer}
+      {FetchMoreButtonContainer}
     </div>
   );
 }
