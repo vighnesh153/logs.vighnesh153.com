@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API_URL} from "../constants";
+import {API_URL, LOGS_PER_PAGE} from "../constants";
 
 import * as util from "./util.service";
 
@@ -18,13 +18,13 @@ export const fetchServices = ({setServices, handleError}) => {
     .catch(handleError);
 };
 
-export const fetchLogs = ({setLogs, handleError, config}, filtersDraft) => {
+export const fetchLogs = ({setLogs, handleError, config, setLoading}, filtersDraft, page=1) => {
   const filters = {};
   if (filtersDraft.service && filtersDraft.service !== 'all') {
     filters["meta.service"] = filtersDraft.service;
   }
   if (filtersDraft.requestId) {
-    filters["meta.requestId"] = filtersDraft.requestId;
+    filters["meta.requestId"] = { $regex : "^" + filtersDraft.requestId };
   }
   if (filtersDraft.logLevel && filtersDraft.logLevel !== 'all') {
     filters.level = filtersDraft.logLevel;
@@ -50,5 +50,11 @@ export const fetchLogs = ({setLogs, handleError, config}, filtersDraft) => {
         return;
       }
       handleError(err);
+    })
+    .finally(() => {
+      if (config.doProcess === false) {
+        return;
+      }
+      setLoading(false);
     });
 };

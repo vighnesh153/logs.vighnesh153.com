@@ -1,7 +1,14 @@
 import React from "react";
 
 import useTheme from "@material-ui/core/styles/useTheme";
-import {FormControl, InputLabel, MenuItem, Select, Grid} from "@material-ui/core";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Grid,
+  TextField,
+} from "@material-ui/core";
 
 function Header({selected, setSelected, services, levels}) {
   const theme = useTheme();
@@ -24,7 +31,7 @@ function Header({selected, setSelected, services, levels}) {
           <MenuItem value={'demo'}>Demo</MenuItem>
         </Select>
       </FormControl>
-      <FormControl variant="outlined" style={{width: 100, marginLeft: theme.spacing(1)}}>
+      <FormControl variant="outlined" style={{width: 150, marginLeft: theme.spacing(1)}}>
         <InputLabel id="logs-select-level-label">Log Level</InputLabel>
         <Select
           labelId="logs-select-level-label"
@@ -38,6 +45,15 @@ function Header({selected, setSelected, services, levels}) {
             <MenuItem value={level} key={index}>{level}</MenuItem>
           ))}
         </Select>
+      </FormControl>
+      <FormControl style={{width: 300, marginLeft: theme.spacing(1)}}>
+        <TextField
+          value={selected.requestId}
+          onChange={({target: {value}}) => setSelected((o) => ({...o, requestId: value}))}
+          label="Request ID"
+          type="search"
+          variant="outlined"
+        />
       </FormControl>
     </Grid>
   );

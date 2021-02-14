@@ -20,10 +20,14 @@ function App() {
   const history = useHistory();
   const location = useLocation();
 
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+
+  const query = util.parseQuery(location.search);
+
   const [logs, setLogs] = useState([]);
   const [services, setServices] = useState([]);
   const [alert, setAlert] = useState({open: false, title: '', content: '', type: ''});
-  const query = util.parseQuery(location.search);
   const [selected, setSelected] = useState({
     service: query.service || '',
     logLevel: query.logLevel || '',
@@ -46,7 +50,8 @@ function App() {
       setLogs(dummyLogs);
     } else {
       setLogs([]);
-      data.fetchLogs({setLogs, handleError, config}, selected);
+      setLoading(true);
+      data.fetchLogs({setLogs, handleError, config, setLoading}, selected, page);
     }
 
     return () => {
@@ -146,7 +151,7 @@ function App() {
 
   const LogsContainer = (
     <Grid style={{width: '95%', margin: theme.spacing(2.5, 'auto'), overflowX: 'auto'}}>
-      <Logs logs={logs}/>
+      <Logs logs={logs} loading={loading}/>
     </Grid>
   );
 

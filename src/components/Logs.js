@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -69,7 +70,7 @@ const getTextColor = (logLevel, theme) => {
   }
 };
 
-export default function Logs({logs}) {
+export default function Logs({logs, loading}) {
   const theme = useTheme();
 
   const tableCells = (log) => {
@@ -113,7 +114,7 @@ export default function Logs({logs}) {
             <TableRow>
               <TableCell colSpan={5}>
                 <Grid container alignItems={"center"} justify={"center"}>
-                  No logs found.
+                  {loading ? <CircularProgress /> : 'No logs found.'}
                 </Grid>
               </TableCell>
             </TableRow>
