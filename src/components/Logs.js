@@ -11,10 +11,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
+  // head: {
+  //   backgroundColor: theme.palette.primary.main,
+  //   color: theme.palette.primary.contrastText,
+  // },
   body: {
     fontSize: 14,
     fontWeight: "bold",
