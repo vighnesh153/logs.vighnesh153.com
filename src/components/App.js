@@ -6,7 +6,6 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import useTheme from "@material-ui/core/styles/useTheme";
 
-import Logs from "./Logs";
 import Alert from "./Alert";
 import Header from "./Header";
 import NavBar from "./Navbar";
