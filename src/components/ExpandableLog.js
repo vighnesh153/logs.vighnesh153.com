@@ -109,7 +109,7 @@ function FormatLog({log, setSelected}) {
         --
       </Typography>
       <Typography>
-        {log.meta.time || new Date().toLocaleString()}
+        {JSON.parse(log.meta || '{}').time || new Date().toLocaleString()}
       </Typography>
       <Typography>
         --
