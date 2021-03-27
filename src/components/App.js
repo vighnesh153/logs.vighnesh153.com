@@ -10,6 +10,7 @@ import Logs from "./Logs";
 import Alert from "./Alert";
 import Header from "./Header";
 import NavBar from "./Navbar";
+import ExpandableLogs from "./ExpandableLogs";
 
 import * as data from "../services/data.service";
 import * as auth from "../services/auth.service";
@@ -157,7 +158,12 @@ function App() {
 
   const LogsContainer = (
     <Grid style={{width: '95%', margin: theme.spacing(2.5, 'auto'), overflowX: 'auto'}}>
-      <Logs logs={logs} loading={loading} selected={selected} setSelected={setSelected}/>
+      <ExpandableLogs
+        logs={logs}
+        loading={loading}
+        selected={selected}
+        setSelected={setSelected}
+      />
     </Grid>
   );
 
